@@ -1,0 +1,15 @@
+@use "./style/button.scss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+*{
+    margin:0%;
+    padding:0%;
+    box-sizing:border-box;
+}
+html,body,#root{
+    min-height: 100%;
+    width:100%;
+    background-color: #0b0f19;
+    color: #e5e7eb;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}

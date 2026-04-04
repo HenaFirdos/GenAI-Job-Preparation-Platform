@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "node dev-runner.js",
+    "backend": "node server.js",
+    "frontend": "npm --prefix Frontend run dev -- --host 0.0.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "saas": "^1.0.0"
+  }
+}
