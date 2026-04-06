@@ -5,6 +5,13 @@ const jwt = require("jsonwebtoken")
 const tokenBlacklistModel = require("../models/blacklist.model")
 const { get } = require("mongoose")
 
+const cookieOptions = {
+    httpOnly: true,
+    sameSite: "none",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+}
+
 /** 
  * @name registerUserController
  * @description resgister a new user, expects username, email and password in the request body
@@ -42,7 +49,7 @@ async function registerUserController(req,res){
             expiresIn:"1d"
         }
     )
-    res.cookie("token",token)
+    res.cookie("token", token, cookieOptions)
     res.status(201).json({
         message:"User registered successfully",
         user:{
@@ -87,7 +94,7 @@ async function loginUserController(req,res){
                 expiresIn:"1d"
             }
         )
-        res.cookie("token",token)
+        res.cookie("token", token, cookieOptions)
         // don't return the password in the response
         res.status(200).json({
             message: "User loggedIn successfully",
@@ -125,7 +132,7 @@ async function logoutUserController(req, res) {
         }
 
         // Clear the cookie on client
-        res.clearCookie('token')
+        res.clearCookie("token", cookieOptions)
         return res.status(200).json({ message: 'User logged out successfully' })
     } catch (err) {
         console.error(err)
