@@ -3,18 +3,33 @@ const app = express()
 const cors = require("cors")
 const multer = require("multer")
 
-// middleware
-app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5174",
-        "http://127.0.0.1:5174",
-        "http://localhost:4173",
-        "http://127.0.0.1:4173",
-    ],
+const DEFAULT_CORS_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173",
+]
+
+const configuredOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean)
+    : DEFAULT_CORS_ORIGINS
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || configuredOrigins.includes(origin) || configuredOrigins.includes("*")) {
+            callback(null, true)
+            return
+        }
+
+        callback(new Error("Not allowed by CORS"))
+    },
     credentials: true,
-}))
+}
+
+// middleware
+app.use(cors(corsOptions))
 
 app.use(express.json())
 // parse cookies for auth middleware
