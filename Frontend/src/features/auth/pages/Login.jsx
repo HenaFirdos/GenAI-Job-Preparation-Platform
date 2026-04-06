@@ -19,7 +19,7 @@ const Login = () => {
 
     try {
       await handleLogin({ email, password })
-      navigate("/")
+      navigate("/home")
     } catch (err) {
       setError(err.message || "Login failed")
     }
