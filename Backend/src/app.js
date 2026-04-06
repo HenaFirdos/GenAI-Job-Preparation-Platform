@@ -1,3 +1,5 @@
+const path = require("path")
+const fs = require("fs")
 const express = require("express")
 const app = express()
 const cors = require("cors")
@@ -41,6 +43,17 @@ const authRouter = require("./routes/auth.routes")
 const interviewRouter=require("./routes/interview.routes")
 app.use("/api/auth", authRouter)
 app.use("/api/interview",interviewRouter)
+
+if (process.env.NODE_ENV === "production") {
+    const frontendDist = path.join(__dirname, "../../Frontend/dist")
+
+    if (fs.existsSync(frontendDist)) {
+        app.use(express.static(frontendDist))
+        app.get("*", (req, res) => {
+            res.sendFile(path.join(frontendDist, "index.html"))
+        })
+    }
+}
 
 // simple health check
 app.get('/health', (req, res) => res.json({ ok: true }))
